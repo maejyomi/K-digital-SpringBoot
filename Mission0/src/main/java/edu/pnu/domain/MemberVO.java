@@ -14,10 +14,10 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor // 모든 생성자 자동 생성
 @NoArgsConstructor // 기본 생성자
+@Builder
 public class MemberVO {
 	private Integer id;
 	private String pass;
 	private String name;
 	private Date regidate;
-	
 }

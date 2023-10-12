@@ -25,15 +25,26 @@ public class MemberController {
 	 * 
 	 * */
 	List<MemberVO> list = new ArrayList<>();
+	int idx = 1;
 	
 	public MemberController() {
-		for(int i=1; i<5; i++) {
+		for(int i=1; i<=5; i++) {
 			MemberVO m = new MemberVO();
-			m.setId(i);
-			m.setName("name"+i);
-			m.setPass("pass"+i);
+			m.setId(idx);
+			m.setName("name"+idx);
+			m.setPass("pass"+idx);
 			m.setRegidate(new Date());
 			list.add(m);
+			idx++;
+			
+			// 빌더 패턴을 이용한 객체 생성
+			list.add(MemberVO.builder()
+					.id(idx)
+					.name("name"+idx)
+					.pass("pass"+idx)
+					.regidate(new Date())
+					.build());
+			idx++;
 		}
 	}
 	
