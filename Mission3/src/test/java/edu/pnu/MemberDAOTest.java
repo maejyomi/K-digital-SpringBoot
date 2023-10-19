@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import edu.pnu.dao.MemberDAO;
+import edu.pnu.dao.MemberDAOH2Impl;
+import edu.pnu.dao.MemberInterface;
 import edu.pnu.domain.MemberVO;
 
 @SpringBootTest
@@ -20,17 +21,17 @@ public class MemberDAOTest {
 	//@Test
 	@Order(0) // 작은 숫자부터 우선순위가 할당되어서 실행됨
 	public void testInsert() {
-		MemberDAO dao = new MemberDAO();
+		MemberInterface dao = new MemberDAOH2Impl();
 		int result = dao.addMember(MemberVO.builder().pass("pass7").name("user8").build());
 
 		System.out.println("[insert] : " + result);
 	}
 
 	@DisplayName("MemberDAO Select All Test")
-	//@Test
+	@Test
 	@Order(1)
 	public void testSelectAll() {
-		MemberDAO dao = new MemberDAO();
+		MemberInterface dao = new MemberDAOH2Impl();
 
 		List<MemberVO> list = dao.getMembers();
 		for (MemberVO m : list) {
@@ -43,7 +44,7 @@ public class MemberDAOTest {
 	@Test
 	@Order(3)
 	public void testSelect() {
-		MemberDAO dao = new MemberDAO();
+		MemberInterface dao = new MemberDAOH2Impl();
 
 		MemberVO m = dao.getMember(1);
 		System.out.println("[select] : " + m);
@@ -53,7 +54,7 @@ public class MemberDAOTest {
 	//@Test
 	@Order(2)
 	public void testUpdate() {
-		MemberDAO dao = new MemberDAO();
+		MemberInterface dao = new MemberDAOH2Impl();
 		MemberVO m = MemberVO.builder().id(7).name("user7").build();
 
 		System.out.println("[update] : " + dao.updateMember(m));
@@ -64,7 +65,7 @@ public class MemberDAOTest {
 	//@Test
 	@Order(4)
 	public void testRemove() {
-		MemberDAO dao = new MemberDAO();
+		MemberInterface dao = new MemberDAOH2Impl();
 		System.out.println("[remove] : " + dao.removeMember(1));
 
 	}

@@ -11,11 +11,11 @@ import java.util.List;
 
 import edu.pnu.domain.MemberVO;
 
-public class MemberDAO {
+public class MemberDAOH2Impl implements MemberInterface {
 	
 	Connection con;
 	
-	public MemberDAO() {
+	public MemberDAOH2Impl() {
 		try {
 			Class.forName("org.h2.Driver");
 			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/.h2/mission2","sa","abcd");
@@ -27,6 +27,7 @@ public class MemberDAO {
 	}
 	
 	// 서비스가 아래의 메서드를 호출함
+	@Override
 	public int addMember(MemberVO memberVO) {
 		if(memberVO.getName() == null || memberVO.getPass() == null) return 0;
 		try {
@@ -43,6 +44,7 @@ public class MemberDAO {
 		return 0;
 		
 	}
+	@Override
 	public List<MemberVO> getMembers(){
 		List<MemberVO> list = new ArrayList<>();
 		try {
@@ -68,6 +70,7 @@ public class MemberDAO {
 		
 		return null;
 	}
+	@Override
 	public MemberVO getMember(int Id) {
 		try {
 			String sql = "select * from member where id=?";
@@ -92,46 +95,33 @@ public class MemberDAO {
 		
 		return null;
 	}
+	@Override
 	public int updateMember(MemberVO memberVO) {
 		if(memberVO.getId() == 0) return -1;
 		
+		MemberVO member = getMember(memberVO.getId());
+		if(member == null) return 0;
+		
+		String sql = "update member set ";
+		if(memberVO.getName() == null)	sql += "name='"+member.getName()+"'";
+		else							sql += "name='"+memberVO.getName()+"'";
+		
+		if(memberVO.getPass() == null)	sql += ",pass='"+member.getPass()+"'";
+		else							sql += ",pass='"+memberVO.getPass()+"'";
+		
+		sql += " where id="+memberVO.getId();
+		
 		try {
-			String sql = "update member set ";
-			if(memberVO.getPass() != null && memberVO.getName()!= null) {
-				sql += "pass=?, name=? where id=?";
-				PreparedStatement psmt = con.prepareStatement(sql);
-				psmt.setString(1, memberVO.getPass());
-				psmt.setString(2, memberVO.getName());
-				psmt.setInt(3, memberVO.getId());
-				
-				return psmt.executeUpdate();
-			}
-			else if(memberVO.getPass() != null) {
-				sql += "pass=? where id=?";
-				PreparedStatement psmt = con.prepareStatement(sql);
-				psmt.setString(1, memberVO.getPass());
-				psmt.setInt(2, memberVO.getId());
-				
-				return psmt.executeUpdate();
-			}
-			else if(memberVO.getName() != null) {
-				sql += "name=? where id=?";
-				PreparedStatement psmt = con.prepareStatement(sql);
-				psmt.setString(1, memberVO.getName());
-				psmt.setInt(2, memberVO.getId());
-				
-				return psmt.executeUpdate();
-			}
-			else
-				return -1;
-				
-		} catch(Exception e) {
+			Statement st = con.createStatement();
+			return st.executeUpdate(sql);
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 		return -1;
 	}
 	
+	@Override
 	public int removeMember(Integer Id) {
 		if(Id == null) return -1;
 		try {
