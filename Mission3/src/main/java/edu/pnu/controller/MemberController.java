@@ -2,6 +2,7 @@ package edu.pnu.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +16,11 @@ import edu.pnu.service.MemberService;
 @RestController
 public class MemberController {
 	
+	@Autowired // Service 어노테이션이 붙은 객체를 자동으로 할당
 	private MemberService memberService;
 	
 	public MemberController() {
-		memberService = new MemberService();
+		
 	}
 	
 	@GetMapping("/member")
