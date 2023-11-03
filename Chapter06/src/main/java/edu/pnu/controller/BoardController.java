@@ -30,9 +30,14 @@ public class BoardController {
 		return "getBoardList"; // Controller는 view의 이름이라고 이해함(viewResolve가 설정되어 있는 경우)
 	}
 	
-	@PostMapping("/insertBoard")
+	@PostMapping("/insertBoard") // 입력이 끝나면 getBoardList로 redirect 
 	public String insertBoard(Board board) {
 		boardService.insertBoard(board);
+		return "redirect:getBoardList";
+	}
+	
+	@GetMapping("/insertBoard") // 실제로 데이터를 입력하는 곳
+	public String insertBoardView(Board board) {
 		return "insertBoard";
 	}
 	
@@ -45,13 +50,13 @@ public class BoardController {
 	@PostMapping("/updateBoard")
 	public String updateBoard(Board board) {
 		boardService.updateBoard(board);
-		return "updateBoard";
+		return "forward:getBoardList";
 	}
 	
 	@GetMapping("/deleteBoard")
 	public String deleteBoard(Board board) {
 		boardService.deleteBoard(board);
-		return "deleteBoard";
+		return "forward:getBoardList";
 	}
 	
 	
