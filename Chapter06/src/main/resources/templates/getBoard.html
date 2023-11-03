@@ -7,6 +7,8 @@
 </head>
 <style>
   	a{text-decoration: none; }
+  	th {padding: 5px;}
+	td {padding: 5px;}
 </style>
 <body th:align="center">
 	<h1>게시글 상세</h1>
@@ -38,7 +40,8 @@
 	</table>
 	</form>
 	<a th:href="@{/insertBoard}">글등록</a>&nbsp;&nbsp;&nbsp;
-	<a th:href="@{/deleteBoard(seq=${board.seq})}">글삭제</a>&nbsp;&nbsp;&nbsp;
+	<a th:if="${session['member'].role == 'ROLE_ADMIN'}" 
+	   th:href="@{/deleteBoard(seq=${board.seq})}">글삭제</a>&nbsp;&nbsp;&nbsp;
 	<a th:href="@{/getBoardList}">글목록</a>
 </body>
 </html>
