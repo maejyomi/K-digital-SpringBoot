@@ -1,21 +1,25 @@
 package edu.pnu.config;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration // 이 클래스가 설정 클래스라고 정의 (loc 컨테이너에 로드)
 @EnableWebSecurity // 스프링 시큐리티 적용에 필요한 객체를 자동 생성
 public class SecurityConfig {
-	@Autowired
-	private DataSource dataSource;
+//	@Autowired
+//	private DataSource dataSource;
+	
+	@Bean
+	PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
 	
 	@Bean // 이 메서드가 리턴하는 객체를 loc 컨테이너에 등록하라는 지시
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -43,15 +47,15 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	@Autowired
-	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication()
-			.dataSource(dataSource)
-			.usersByUsernameQuery("select username, concat('{noop}', password) password, "
-					+ "enable from member where username=?")
-			.authoritiesByUsernameQuery("select username, role from member where username=?");
-	}
-	
+//	@Autowired
+//	public void authenticate(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.jdbcAuthentication()
+//			.dataSource(dataSource)
+//			.usersByUsernameQuery("select username, concat('{noop}', password) password, "
+//					+ "enable from member where username=?")
+//			.authoritiesByUsernameQuery("select username, role from member where username=?");
+//	}
+//	
 	
 //	@Autowired
 //	public void authenticated(AuthenticationManagerBuilder auth) throws Exception {
