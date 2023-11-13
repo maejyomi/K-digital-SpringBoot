@@ -16,6 +16,9 @@ public class SecurityConfig {
 	@Autowired
 	private SecurityUserDetailsService userDetailsService;
 	
+	@Autowired
+	private BoardOAuth2UserDetailsService oauthService;
+	
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -35,6 +38,12 @@ public class SecurityConfig {
 		
 		security.exceptionHandling(ex -> ex.accessDeniedPage("/system/accessDenied"));
 		security.logout(logout->logout.logoutUrl("/system/logout").invalidateHttpSession(true).logoutSuccessUrl("/"));
+		
+		security.oauth2Login(oauth2->{
+			oauth2.loginPage("/login")
+				.userInfoEndpoint(uend->uend.userService(oauthService))
+				.defaultSuccessUrl("/", true);
+		});
 		
 		return security.build();
 	}

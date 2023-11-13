@@ -11,8 +11,9 @@
 	
 	<span sec:authorize="isAuthenticated()">
 		<b>
-			<font color="red">
-				<span sec:authentication="principal.member.name"></span>
+			<font color="orange">
+<!--				<span sec:authentication="principal.member.name"></span>-->
+			<span th:text="${name}"></span>
 			</font>
 		</b> 님 환영합니다.........
 		<a th:href="@{/system/logout}">로그아웃</a>&nbsp;&nbsp;&nbsp;

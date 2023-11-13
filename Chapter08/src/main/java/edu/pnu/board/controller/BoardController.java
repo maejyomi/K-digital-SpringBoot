@@ -3,6 +3,7 @@ package edu.pnu.board.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,17 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@RequestMapping("/getBoardList")
-	public String getBoardList(Model model, Search search) {
+	public String getBoardList(Model model, Search search, @AuthenticationPrincipal OAuth2User principal) {
 		if(search.getSearchCondition() == null)
 			search.setSearchCondition("TITLE");
 		if(search.getSearchKeyword() == null)
 			search.setSearchKeyword("");
 		
+		String name = principal.getAttribute("name"); // 구글 로그인 했을때 이름
+		
 		Page<Board> boardList = boardService.getBoardList(search);
 		model.addAttribute("boardList", boardList);
-		
+		model.addAttribute("name", name);
 		return "board/getBoardList";
 	}
 	
